@@ -6,11 +6,11 @@ from google_play_scraper.constants.request import Formats
 from google_play_scraper.utils.request import get
 
 
-def app(app_id, lang="en", country="us"):
+async def app(app_id, lang="en", country="us"):
     # type: (str, str, str) -> dict
     url = Formats.Detail.build(app_id=app_id, lang=lang, country=country)
 
-    dom = get(url)
+    dom = await get(url)
 
     matches = Regex.SCRIPT.findall(dom)
 

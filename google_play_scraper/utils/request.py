@@ -5,31 +5,33 @@ except ImportError:
 
 from google_play_scraper.exceptions import NotFoundError, ExtraHTTPError
 
-from urllib.error import HTTPError
-from urllib.request import urlopen, Request
+import aiohttp
 
 
-def _urlopen(obj):
+async def handle_resp(resp):
     try:
-        resp = urlopen(obj)
-    except HTTPError as e:
-        if e.code == 404:
+        resp.raise_for_status()
+        return await resp.text()
+    except aiohttp.ClientResponseError as x:
+        if x.status == 404:
             raise NotFoundError("App not found(404).")
         else:
             raise ExtraHTTPError(
-                "App not found. Status code {} returned.".format(e.code)
+                "App not found. Status code {} returned.".format(x.status)
             )
 
-    return resp.read().decode("UTF-8")
 
-
-def post(url, data, headers):
+async def post(url, data, headers):
     # type: (str, Union[str, bytes], dict) -> str
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, data=data, headers=headers) as resp:
+            # resp.text()
+            return await handle_resp(resp)
 
-    return _urlopen(Request(url, data=data, headers=headers))
+    # return _urlopen(Request(url, data=data, headers=headers))
 
 
-def get(url):
-    # type: (str) -> str
-
-    return _urlopen(url)
+async def get(url: str) -> str:
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            return await handle_resp(resp)

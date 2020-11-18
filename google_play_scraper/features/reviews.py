@@ -41,8 +41,8 @@ class ContinuationToken:
         )
 
 
-def _fetch_review_items(url, app_id, sort, count, filter_score_with, pagination_token):
-    dom = post(
+async def _fetch_review_items(url, app_id, sort, count, filter_score_with, pagination_token):
+    dom = await post(
         url,
         Formats.ReviewsBodyData.build(
             app_id,
@@ -59,7 +59,7 @@ def _fetch_review_items(url, app_id, sort, count, filter_score_with, pagination_
     return json.loads(match[0][2])[0], json.loads(match[0][2])[-1][-1]
 
 
-def reviews(
+async def reviews(
     app_id,
     lang=None,
     country=None,
@@ -108,7 +108,7 @@ def reviews(
 
     while True:
         try:
-            review_items, token = _fetch_review_items(
+            review_items, token = await _fetch_review_items(
                 url, app_id, sort, _count, filter_score_with, token
             )
         except (TypeError, IndexError):
@@ -141,7 +141,7 @@ def reviews(
     )
 
 
-def reviews_all(app_id, sleep_milliseconds=0, **kwargs):
+async def reviews_all(app_id, sleep_milliseconds=0, **kwargs):
     kwargs.pop("count", None)
     kwargs.pop("continuation_token", None)
 
@@ -150,7 +150,7 @@ def reviews_all(app_id, sleep_milliseconds=0, **kwargs):
     result = []
 
     while True:
-        result_, _continuation_token = reviews(
+        result_, _continuation_token = await reviews(
             app_id, count=_count, continuation_token=_continuation_token, **kwargs
         )
 

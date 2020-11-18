@@ -24,12 +24,18 @@ The country and language codes that can be included in the `lang` and `country` 
 ### App Detail
 ```python
 from google_play_scraper import app
+import asyncio
 
-result = app(
-    'com.nianticlabs.pokemongo',
-    lang='en', # defaults to 'en'
-    country='us' # defaults to 'us'
-)
+async def main():
+    result = await app(
+        'com.nianticlabs.pokemongo',
+        lang='en', # defaults to 'en'
+        country='us' # defaults to 'us'
+    )
+    print(result)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
 ```
 
 Result of `print(result)`:
@@ -160,23 +166,29 @@ Result of `print(result)`:
 
 ```python
 from google_play_scraper import Sort, reviews
+import asyncio
 
-result, continuation_token = reviews(
-    'com.fantome.penguinisle',
-    lang='en', # defaults to 'en'
-    country='us', # defaults to 'us'
-    sort=Sort.MOST_RELEVANT, # defaults to Sort.MOST_RELEVANT
-    count=3, # defaults to 100
-    filter_score_with=5 # defaults to None(means all score)
-)
+async def main():
+    result, continuation_token = await reviews(
+        'com.fantome.penguinisle',
+        lang='en', # defaults to 'en'
+        country='us', # defaults to 'us'
+        sort=Sort.MOST_RELEVANT, # defaults to Sort.MOST_RELEVANT
+        count=3, # defaults to 100
+        filter_score_with=5 # defaults to None(means all score)
+    )
 
-# If you pass `continuation_token` as an argument to the reviews function at this point,
-# it will crawl the items after 3 review items.
+    # If you pass `continuation_token` as an argument to the reviews function at this point,
+    # it will crawl the items after 3 review items.
+    
+    result, _ = await reviews(
+        'com.fantome.penguinisle',
+        continuation_token=continuation_token # defaults to None(load from the beginning)
+    )
 
-result, _ = reviews(
-    'com.fantome.penguinisle',
-    continuation_token=continuation_token # defaults to None(load from the beginning)
-)
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+
 ```
 
 Result of `print(result)`:
@@ -230,14 +242,22 @@ Result of `print(result)`:
 ```python
 from google_play_scraper import Sort, reviews_all
 
-result = reviews_all(
+from google_play_scraper import Sort, reviews
+import asyncio
+
+async def main():
+    result = await reviews_all(
     'com.fantome.penguinisle',
     sleep_milliseconds=0, # defaults to 0
     lang='en', # defaults to 'en'
     country='us', # defaults to 'us'
     sort=Sort.MOST_RELEVANT, # defaults to Sort.MOST_RELEVANT
     filter_score_with=5 # defaults to None(means all score)
-)
+    )
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+
 ```
 
 ## Changes
