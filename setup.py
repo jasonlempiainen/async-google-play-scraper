@@ -8,8 +8,8 @@ setup(
     version=__version__,
     url="https://github.com/liorchen/google-play-scraper",
     license="MIT",
-    author="PlanB",
-    author_email="mingyu.planb@gmail.com",
+    author="Lior Chen",
+    author_email="liorchen2@gmail.com",
     description="Async-Google-Play-Scraper provides APIs to easily crawl the Google Play Store"
     " for Python with aiohttp!",
     classifiers=[

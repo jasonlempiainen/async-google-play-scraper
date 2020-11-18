@@ -1,4 +1,4 @@
-# Google-Play-Scraper
+# Async Google-Play-Scraper
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 [![PyPI](https://img.shields.io/pypi/v/google-play-scraper.svg)](https://pypi.org/project/google-play-scraper)
@@ -15,7 +15,7 @@ I have referred a lot to the API design of this library.
 
 ## Installation
 ```
-pip install google-play-scraper
+pip install async-google-play-scraper
 ```
 
 ## Usage
